@@ -48,6 +48,7 @@
         <input type="email" id="email" name="email" placeholder="Seu email" required>
         <textarea id="message" name="message" rows="5" placeholder="Sua mensagem" required></textarea>
         <button type="submit">Enviar</button>
+        <div id="response" style="margin-top: 10px;"></div>
     </form>
 
     <script>
@@ -57,6 +58,7 @@
             var name = document.getElementById('name').value;
             var email = document.getElementById('email').value;
             var message = document.getElementById('message').value;
+            var responseDiv = document.getElementById('response');
 
             // Enviar os dados para o Google Apps Script
             fetch('https://script.google.com/macros/s/AKfycbyakfjtj694Nda5wFbFb7HuzG_6lqLnxkaQEWDB9O5-hfoTzXAKVbjwn6aiLCrECkegTQ/exec', {
@@ -68,12 +70,15 @@
             }).then(response => response.json())
               .then(data => {
                   if (data.result === 'success') {
-                      alert('Mensagem enviada com sucesso!');
+                      responseDiv.textContent = 'Mensagem enviada com sucesso!';
+                      responseDiv.style.color = 'green';
                   } else {
-                      alert('Falha ao enviar mensagem.');
+                      responseDiv.textContent = 'Falha ao enviar mensagem: ' + data.error;
+                      responseDiv.style.color = 'red';
                   }
               }).catch(error => {
-                  alert('Erro ao enviar mensagem.');
+                  responseDiv.textContent = 'Erro ao enviar mensagem: ' + error.message;
+                  responseDiv.style.color = 'red';
                   console.error('Error:', error);
               });
         });
